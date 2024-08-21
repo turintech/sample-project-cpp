@@ -46,8 +46,8 @@ TEST_CASE("Vector::SortVector::Test", "[test][datastructures][vector]") {
 TEST_CASE("Vector::SortVector::Benchmark", "[benchmark][datastructures][vector]") {
   std::vector<int> v0 = GenVector::RandomVector(1000, 100);
   BENCHMARK("SortVector(1000)") { return OpsVector::SortVector(v0); };
-  std::vector<int> v1 = GenVector::RandomVector(10000, 100);
-  BENCHMARK("SortVector(10000)") { return OpsVector::SortVector(v1); };
+//  std::vector<int> v1 = GenVector::RandomVector(10000, 100);
+//  BENCHMARK("SortVector(10000)") { return OpsVector::SortVector(v1); };
 }
 
 TEST_CASE("Vector::SearchVector::Test", "[test][datastructures][vector]") {

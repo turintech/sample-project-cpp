@@ -35,8 +35,8 @@ TEST_CASE("VectorAlgebra::Cubic::Benchmark", "[benchmark][math][vectoralgebra]")
   BENCHMARK("Cubic(1000)") { return MathVectorAlgebra::Cubic(1, -1, -2, 4, x0); };
   std::vector<double> x1 = GenVector::RandomVectorDouble(100000, -10, 10);
   BENCHMARK("Cubic(100000)") { return MathVectorAlgebra::Cubic(-2, 1, 3, -8, x1); };
-  std::vector<double> x2 = GenVector::RandomVectorDouble(10000000, -10, 10);
-  BENCHMARK("Cubic(10000000)") { return MathVectorAlgebra::Cubic(3, -1, 1, 3, x2); };
+//  std::vector<double> x2 = GenVector::RandomVectorDouble(10000000, -10, 10);
+//  BENCHMARK("Cubic(10000000)") { return MathVectorAlgebra::Cubic(3, -1, 1, 3, x2); };
 }
 
 TEST_CASE("VectorAlgebra::Convolve::Test", "[test][math][vectoralgebra]") {

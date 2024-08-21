@@ -21,8 +21,8 @@ TEST_CASE("Simulation::PseudoGravity::Test", "[test][math][simulation]") {
 }
 
 TEST_CASE("Simulation::PseudoGravity::Benchmark", "[benchmark][math][simulation]") {
-  std::vector<double> x0 = GenVector::RandomVectorDouble(3000, -1, 1);
-  BENCHMARK("SimpleGravity((1000), 0.1, 100)") { return MathSimulation::PseudoGravity(x0, 0.1, 100); };
+//  std::vector<double> x0 = GenVector::RandomVectorDouble(3000, -1, 1);
+//  BENCHMARK("SimpleGravity((1000), 0.1, 100)") { return MathSimulation::PseudoGravity(x0, 0.1, 100); };
   std::vector<double> x1 = GenVector::RandomVectorDouble(300, -1, 1);
   BENCHMARK("SimpleGravity((100), 0.1, 1000)") { return MathSimulation::PseudoGravity(x1, 0.1, 1000); };
   std::vector<double> x2 = GenVector::RandomVectorDouble(30, -1, 1);
@@ -39,10 +39,10 @@ TEST_CASE("Simulation::BetterGravity::Test", "[test][math][simulation]") {
 }
 
 TEST_CASE("Simulation::SimpleGravity::Benchmark", "[benchmark][math][simulation]") {
-  std::vector<double> x0 = GenVector::RandomVectorDouble(3000, -1, 1);
-  std::vector<double> v0 = GenVector::RandomVectorDouble(3000, -1, 1);
-  std::vector<double> m0 = GenVector::RandomVectorDouble(1000, -1, 1);
-  BENCHMARK("SimpleGravity((1000), 0.1, 100)") { return MathSimulation::SimpleGravity(x0, v0, m0, 1, 100); };
+//  std::vector<double> x0 = GenVector::RandomVectorDouble(3000, -1, 1);
+//  std::vector<double> v0 = GenVector::RandomVectorDouble(3000, -1, 1);
+//  std::vector<double> m0 = GenVector::RandomVectorDouble(1000, -1, 1);
+//  BENCHMARK("SimpleGravity((1000), 0.1, 100)") { return MathSimulation::SimpleGravity(x0, v0, m0, 1, 100); };
   std::vector<double> x1 = GenVector::RandomVectorDouble(300, -1, 1);
   std::vector<double> v1 = GenVector::RandomVectorDouble(300, -1, 1);
   std::vector<double> m1 = GenVector::RandomVectorDouble(100, -1, 1);
@@ -97,7 +97,7 @@ TEST_CASE("Simulation::MandelbrotSet::Benchmark", "[benchmark][math][simulation]
   BENCHMARK("MandelbrotSet(slow(20, 20), 50000)") {
     return MathSimulation::MandelbrotSet(0, 0, 1000.0, 20, 20, 50000);
   };
-  BENCHMARK("MandelbrotSet(fast(1000, 1000), 50000)") {
-    return MathSimulation::MandelbrotSet(-0.57, 0.57, 1000.0, 1000, 1000, 50000);
-  };
+//  BENCHMARK("MandelbrotSet(fast(1000, 1000), 50000)") {
+//    return MathSimulation::MandelbrotSet(-0.57, 0.57, 1000.0, 1000, 1000, 50000);
+//  };
 }

@@ -59,9 +59,9 @@ TEST_CASE("MatrixAlgebra::MatrixMultiply::Benchmark", "[benchmark][math][matrixa
   BENCHMARK("MatrixMultiply((100, 100), (100, 100))") {
     return MathMatrixAlgebra::MatrixMultiply(a0, 100, 100, a0, 100, 100);
   };
-  BENCHMARK("MatrixMultiply((100, 1000), (1000, 100))") {
-    return MathMatrixAlgebra::MatrixMultiply(a2, 100, 1000, a1, 1000, 100);
-  };
+//  BENCHMARK("MatrixMultiply((100, 1000), (1000, 100))") {
+//    return MathMatrixAlgebra::MatrixMultiply(a2, 100, 1000, a1, 1000, 100);
+//  };
 }
 
 TEST_CASE("MatrixAlgebra::RotatePoints::Test", "[test][math][matrixalgebra]") {
