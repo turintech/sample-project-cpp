@@ -32,4 +32,3 @@ over this array and checking whether the element is divisible by `m`.
 - It is more efficient to simply iterate in some for loop with step size `m`
 and sum the values.
 - As for `SumRange`, a parallel implementation would be faster.
-
