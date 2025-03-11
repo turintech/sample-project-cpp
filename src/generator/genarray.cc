@@ -1,5 +1,5 @@
 #include "genarray.h"
-
+# test
 double *
 GenArray::RandomArray(int n, int m) {
   std::random_device rd;
