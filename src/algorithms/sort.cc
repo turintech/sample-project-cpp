@@ -1,6 +1,7 @@
 #include "sort.h"
 
 #include <algorithm>
+#include <queue>
 
 /**
  * @brief Sorts a vector of integers (in place)
@@ -20,19 +21,15 @@ Sort::SortVector(std::vector<int> &v) {
  */
 void
 Sort::DutchFlagPartition(std::vector<int> &v, int pivot_value) {
-  int next_value = 0;
-
-  for (int i = 0; i < (int) v.size(); i += 1) {
-    if (v[i] < pivot_value) {
-      std::swap(v[i], v[next_value]);
-      next_value += 1;
-    }
-  }
-
-  for (int i = next_value; i < (int) v.size(); i += 1) {
-    if (v[i] == pivot_value) {
-      std::swap(v[i], v[next_value]);
-      next_value += 1;
+  int smaller = 0, equal = 0, larger = (int) v.size();
+  // In-place O(n) three-way partitioning (more efficient for large arrays, less cache churn)
+  while (equal < larger) {
+    if (v[equal] < pivot_value) {
+      std::swap(v[smaller++], v[equal++]);
+    } else if (v[equal] == pivot_value) {
+      ++equal;
+    } else {
+      std::swap(v[equal], v[--larger]);
     }
   }
 }
@@ -43,18 +40,38 @@ Sort::DutchFlagPartition(std::vector<int> &v, int pivot_value) {
  * @param v the vector to search
  * @param n the number of elements to return
  * @return the largest n elements in the vector
+ *
+ * This implementation uses a min-heap to keep only n largest items,
+ * reducing memory usage and improving runtime for large inputs.
  */
 std::vector<int>
 Sort::MaxN(std::vector<int> &v, int n) {
-  std::vector<int> ret;
-  // So that we don't modify the original vector
-  std::vector<int> temp(v);
-
-  std::sort(temp.begin(), temp.end());
-
-  for (int i = (int) temp.size() - 1; i >= (int) temp.size() - n; i -= 1) {
-    ret.push_back(temp[i]);
+  // Edge cases
+  if (n <= 0)
+    return {};
+  if ((int)v.size() <= n) {
+    std::vector<int> ret(v);
+    std::sort(ret.begin(), ret.end(), std::greater<int>());
+    return ret;
   }
 
+  // Min-heap to keep track of n largest elements
+  std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap;
+
+  for (int x : v) {
+    if ((int)minHeap.size() < n) {
+      minHeap.push(x);
+    } else if (x > minHeap.top()) {
+      minHeap.pop();
+      minHeap.push(x);
+    }
+  }
+  std::vector<int> ret;
+  ret.reserve(n);
+  while (!minHeap.empty()) {
+    ret.push_back(minHeap.top());
+    minHeap.pop();
+  }
+  std::sort(ret.begin(), ret.end(), std::greater<int>());
   return ret;
 }

@@ -1,18 +1,19 @@
 #include "vector.h"
 
 #include <iostream>
+#include <algorithm> // For std::sort, std::reverse, std::copy, std::rotate
 
 void
 OpsVector::PrintVector(const std::vector<int> &v) {
   std::cout << "[";
   for (int i = 0; i < (int) v.size(); i += 1) {
-    std::cout << v[i] << " ";
+    std::cout << v[i];
     if (i < (int) v.size() - 1) {
       std::cout << ", ";
     }
   }
-  std::cout << std::endl;
   std::cout << "]";
+  std::cout << std::endl;
 }
 
 void
@@ -47,8 +48,8 @@ OpsVector::PrintMatrix(const std::vector<std::vector<double>> &m) {
 std::vector<int>
 OpsVector::ModifyVector(std::vector<int> &v) {
   std::vector<int> v_copy(v);
-  for (int i = 0; i < (int) v_copy.size(); i += 1) {
-    v_copy.at(i) += 1;
+  for (int i = 0, n = (int)v_copy.size(); i < n; ++i) {
+    v_copy[i] += 1;
   }
   return v_copy;
 }
@@ -63,12 +64,13 @@ OpsVector::ModifyVector(std::vector<int> &v) {
 std::vector<int>
 OpsVector::SearchVector(std::vector<int> &v, int n) {
   std::vector<int> ret;
-
-  for (int i = 0; i < (int) v.size(); i += 1) {
+  ret.reserve(v.size());
+  for (int i = 0, sz = (int)v.size(); i < sz; ++i) {
     if (v[i] == n) {
       ret.push_back(i);
     }
   }
+  ret.shrink_to_fit();
   return ret;
 }
 
@@ -81,16 +83,7 @@ OpsVector::SearchVector(std::vector<int> &v, int n) {
 std::vector<int>
 OpsVector::SortVector(std::vector<int> &v) {
   std::vector<int> ret(v);
-
-  for (int i = 0; i < (int) ret.size(); i += 1) {
-    for (int j = 0; j < (int) ret.size() - 1; j += 1) {
-      if (ret[j] > ret[j + 1]) {
-        int temp = ret[j];
-        ret[j] = ret[j + 1];
-        ret[j + 1] = temp;
-      }
-    }
-  }
+  std::sort(ret.begin(), ret.end());
   return ret;
 }
 
@@ -102,11 +95,8 @@ OpsVector::SortVector(std::vector<int> &v) {
  */
 std::vector<int>
 OpsVector::ReverseVector(std::vector<int> &v) {
-  std::vector<int> ret;
-
-  for (int i = (int) v.size() - 1; i >= 0; i -= 1) {
-    ret.push_back(v[i]);
-  }
+  std::vector<int> ret(v);
+  std::reverse(ret.begin(), ret.end());
   return ret;
 }
 
@@ -119,14 +109,11 @@ OpsVector::ReverseVector(std::vector<int> &v) {
  */
 std::vector<int>
 OpsVector::RotateVector(std::vector<int> &v, int n) {
-  std::vector<int> ret;
-
-  for (int i = n; i < (int) v.size(); i += 1) {
-    ret.push_back(v[i]);
-  }
-  for (int i = 0; i < n; i += 1) {
-    ret.push_back(v[i]);
-  }
+  std::vector<int> ret(v.size());
+  int sz = (int)v.size();
+  if (sz == 0) return ret;
+  n = ((n % sz) + sz) % sz; // Ensure n is in [0, sz)
+  std::rotate_copy(v.begin(), v.begin() + n, v.end(), ret.begin());
   return ret;
 }
 
@@ -140,13 +127,8 @@ OpsVector::RotateVector(std::vector<int> &v, int n) {
 std::vector<int>
 OpsVector::MergeVectors(std::vector<int> &v1, std::vector<int> &v2) {
   std::vector<int> ret;
-
-  for (int i = 0; i < (int) v1.size(); i += 1) {
-    ret.push_back(v1[i]);
-  }
-  for (int i = 0; i < (int) v2.size(); i += 1) {
-    ret.push_back(v2[i]);
-  }
-
+  ret.reserve(v1.size() + v2.size());
+  ret.insert(ret.end(), v1.begin(), v1.end());
+  ret.insert(ret.end(), v2.begin(), v2.end());
   return ret;
 }

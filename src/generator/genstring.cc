@@ -7,11 +7,19 @@
  */
 std::string
 GenString::RandomString(int n) {
+  // Reserve memory to avoid reallocation
   std::string ret;
+  ret.reserve(n);
 
-  srand(0);
-  for (int i = 0; i < n; i += 1) {
-    ret += (char) (rand() % 26 + 97);
+  // Use a static local variable to avoid reseeding every call (causes performance and repetition issues)
+  static bool seeded = false;
+  if (!seeded) {
+    srand(0);
+    seeded = true;
+  }
+
+  for (int i = 0; i < n; ++i) {
+    ret += static_cast<char>('a' + rand() % 26);
   }
   return ret;
 }
