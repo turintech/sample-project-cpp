@@ -42,7 +42,7 @@ endif()
 
 target_link_libraries(tests 
   PRIVATE 
-    Catch2::Catch2WithMain 
+    Catch2::Catch2
   PUBLIC 
     generator_lib
     datastructures_lib 

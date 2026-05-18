@@ -20,4 +20,4 @@ _deps
 .vscode
 
 # benchmark output
-artemis_results.xml
+artemis_results.json
