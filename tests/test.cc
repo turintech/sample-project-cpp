@@ -53,52 +53,42 @@ class JsonBenchmarkReporter : public Catch::StreamingReporterBase {
     return "Writes benchmark results as JSON (custom Artemis reporter)";
   }
 
+  // Artemis's results reader applies float() to every value in the JSON,
+  // so this reporter emits a flat { "<benchmark>_<metric>": <number>, ... }
+  // map with no string fields and no nested structures.
+
   void testRunStarting(Catch::TestRunInfo const& info) override {
     StreamingReporterBase::testRunStarting(info);
-    auto& os = m_stream;
-    os << "{\n";
-    os << "  \"run\": \"" << json_escape(std::string(info.name)) << "\",\n";
-    os << "  \"benchmarks\": [";
+    (void)info;
+    m_stream << "{";
     m_first = true;
   }
 
   void benchmarkEnded(Catch::BenchmarkStats<> const& stats) override {
     auto& os = m_stream;
-    if (!m_first) os << ",";
-    m_first = false;
-    os << "\n    {";
-    os << "\"name\": \"" << json_escape(std::string(stats.info.name)) << "\"";
-    os << ", \"samples\": " << stats.info.samples;
-    os << ", \"iterations\": " << stats.info.iterations;
-    os << ", \"mean_ns\": " << stats.mean.point.count();
-    os << ", \"mean_lower_ns\": " << stats.mean.lower_bound.count();
-    os << ", \"mean_upper_ns\": " << stats.mean.upper_bound.count();
-    os << ", \"stddev_ns\": " << stats.standardDeviation.point.count();
-    os << ", \"stddev_lower_ns\": " << stats.standardDeviation.lower_bound.count();
-    os << ", \"stddev_upper_ns\": " << stats.standardDeviation.upper_bound.count();
-    os << "}";
+    std::string n = json_escape(std::string(stats.info.name));
+    write_kv(n + "_mean_ns",   stats.mean.point.count());
+    write_kv(n + "_stddev_ns", stats.standardDeviation.point.count());
+    write_kv(n + "_samples",   static_cast<double>(stats.info.samples));
+    write_kv(n + "_iterations",static_cast<double>(stats.info.iterations));
+    (void)os;
   }
 
-  void benchmarkFailed(Catch::StringRef error) override {
-    auto& os = m_stream;
-    if (!m_first) os << ",";
-    m_first = false;
-    os << "\n    {\"name\": \"" << json_escape(std::string(error)) << "\", \"failed\": true}";
+  void benchmarkFailed(Catch::StringRef /*error*/) override {
+    // Skip failed benchmarks in serialised output; Artemis only ingests numbers.
   }
 
   void testRunEnded(Catch::TestRunStats const& stats) override {
-    auto& os = m_stream;
-    os << "\n  ],\n";
-    os << "  \"totals\": {";
-    os << "\"test_cases\": " << stats.totals.testCases.total();
-    os << ", \"test_cases_passed\": " << stats.totals.testCases.passed;
-    os << ", \"test_cases_failed\": " << stats.totals.testCases.failed;
-    os << ", \"assertions\": " << stats.totals.assertions.total();
-    os << ", \"assertions_passed\": " << stats.totals.assertions.passed;
-    os << ", \"assertions_failed\": " << stats.totals.assertions.failed;
-    os << "}\n";
-    os << "}\n";
+    (void)stats;
+    m_stream << "\n}\n";
     StreamingReporterBase::testRunEnded(stats);
+  }
+
+ private:
+  void write_kv(std::string const& key, double value) {
+    if (!m_first) m_stream << ",";
+    m_first = false;
+    m_stream << "\n  \"" << key << "\": " << value;
   }
 
  private:
