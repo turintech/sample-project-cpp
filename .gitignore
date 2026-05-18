@@ -16,5 +16,8 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
-# editor 
+# editor
 .vscode
+
+# benchmark output
+artemis_results.xml
