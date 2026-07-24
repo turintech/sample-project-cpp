@@ -65,13 +65,10 @@ class JsonBenchmarkReporter : public Catch::StreamingReporterBase {
   }
 
   void benchmarkEnded(Catch::BenchmarkStats<> const& stats) override {
-    auto& os = m_stream;
     std::string n = json_escape(std::string(stats.info.name));
-    write_kv(n + "_mean_ns",   stats.mean.point.count());
-    write_kv(n + "_stddev_ns", stats.standardDeviation.point.count());
-    write_kv(n + "_samples",   static_cast<double>(stats.info.samples));
-    write_kv(n + "_iterations",static_cast<double>(stats.info.iterations));
-    (void)os;
+    // Restrict serialised output to mean_ns of SumPrimes benchmarks.
+    if (n.rfind("SumPrimes", 0) != 0) return;
+    write_kv(n + "_mean_ns", stats.mean.point.count());
   }
 
   void benchmarkFailed(Catch::StringRef /*error*/) override {

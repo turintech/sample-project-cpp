@@ -4,9 +4,9 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "$DIR/variables.sh"
 
-# The test binary's custom main writes serialised benchmark results to
-# artemis_results.json by default (alongside console output).
-BENCHMARK="build/tests/tests [benchmark]"
+# Run only the SumPrimes benchmark case; the artemis-json reporter also
+# filters to SumPrimes*_mean_ns so artemis_results.json stays focused.
+BENCHMARK='build/tests/tests "Primes::SumPrimes::Benchmark"'
 echo "Running benchmark command: $BENCHMARK"
 eval $BENCHMARK
 
